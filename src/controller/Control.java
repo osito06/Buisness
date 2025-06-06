@@ -116,27 +116,42 @@ public class Control {
         
     }
 
-    public void loadEmployees(){
-
-    }
     public void modifuEmploye() {
-
+        Short id = io.readGraphicShort("ingrese el id del empleado a modificar");
+        int position = businessObj.serchEmploye(id);
+        try{
+            if (position != -1) {
+                Employee emp = businessObj.getEmployeesArray()[position];
+                emp.setFirstName(io.readGraphicString("ingrese el primer nombre"));
+                emp.setSalary(io.readGraphicDouble("ingrese el nuevo salario"));
+                emp.setBirthDate(emp.createDate(io.readGraphicShort("ingrese su dia de nacimiento"), io.readGraphicShort("ingrese su mes de nacimiento"), io.readGraphicShort("ingrese su año de nacimiento")));
+                emp.setHirDate(emp.createDate(io.readGraphicShort("ingrese su dia de ingreso"), io.readGraphicShort("ingrese su mes de ingreso"), io.readGraphicShort("ingrese su año de ingreso")));
+                io.showGraphicMessage("Empleado modificado con éxito");
+            } else {
+                io.showErrorMessage("Empleado no encontrado");
+            }
+        } catch (Exception e) {
+            io.showErrorMessage("Error al modificar el empleado: " + e.getMessage());
+        }
     }
     
     public void delateEmploye() {
         Short id = io.readGraphicShort("ingrese el id del empleado a eliminar");
-        int position = businessObj.serchEmploye(id);
-        if (position != -1) {
-            businessObj.getEmployeesArray()[position] = null;
-            io.showGraphicMessage("Empleado eliminado con éxito");
-        } else {
-            io.showErrorMessage("Empleado no encontrado");
-        }   
+        try{
+            if(businessObj.serchEmploye(id) != -1){
+                businessObj.removeEmploye(id);
+                io.showGraphicMessage("Empleado eliminado con éxito");
+            }else{
+                throw new Exception("El empleado no existe");
+            }
+        } catch (Exception e) {
+            io.showErrorMessage("El empleado no existe o no se pudo eliminar");
+        }
     }
 
 
     public void showOneEmploye() {
-        String id = io.readGraphicString("ingree el nombre del empleado a buscar");
+        String id = io.readGraphicString("ingree el id del empleado a buscar");
         int position = businessObj.serchEmploye(id);
         if (position != -1) {
             Employee emp = businessObj.getEmployeesArray()[position];
@@ -152,7 +167,6 @@ public class Control {
         Employee emp [] =  businessObj.getEmployeesArray();
         for(int i = 0 ; i < emp.length-1; i++) {
             if (emp != null) {
-
                 sb.append("ID: ").append(emp[i].getId() );
                 sb .append("\nNombre: ").append(emp[i].getFirstName());
                 sb.append("\nSalario: ").append(emp[i].getSalary());

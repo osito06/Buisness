@@ -1,5 +1,4 @@
 package model;
-import model.Employee;
 
 public class Business {
     private String name = "";
@@ -40,11 +39,15 @@ public class Business {
         }
         employeesArray = newArray;
     }
-    public void decrementSize(int position) {
-        
+
+    public void decrementSize() {
         Employee[] newArray = new Employee[employeesArray.length - 1];
+        int j = 0;
         for (int i = 0; i < employeesArray.length; i++) {
-            newArray[i] = employeesArray[i];
+            if(employeesArray[i] != null) {
+                newArray[i] = employeesArray[j];
+                j++;
+            }
         }
         employeesArray = newArray;
     }
@@ -77,6 +80,14 @@ public class Business {
     public void addEmployee(Employee employee) {
         employeesArray[employeesArray.length - 1] = employee;
         this.inremVectorSize();
+    }
+    public void removeEmploye(short id){
+        for(int i = 0 ; i < employeesArray.length ; i++){
+            if(employeesArray[i].getId() == id){
+                employeesArray[i] = null;
+                this.decrementSize();
+            }
+        }
     }
  
         
